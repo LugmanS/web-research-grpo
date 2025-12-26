@@ -18,12 +18,8 @@ import re
 import itertools
 import threading
 import asyncio
-import litellm
 
 load_dotenv()
-
-litellm.api_base = os.environ["JUDGE_MODEL_BASE_URL"]
-litellm.api_key = os.environ["JUDGE_MODEL_API_KEY"]
 
 # -----------------------------
 # Data models
@@ -245,21 +241,25 @@ async def judge_policy_generation(gold: Scenario, traj: Trajectory) -> PolicyJud
         { "role": "user", "content": (policy_judge_base_prompt, json.dumps(judge_input, indent=2)) }
     ]
     
-    response = await litellm.acompletion(
+    client = AsyncOpenAI(
+        base_url=os.getenv("JUDGE_MODEL_BASE_URL"),
+        api_key=os.getenv("JUDGE_MODEL_API_KEY"),
+    )
+    
+    response = await client.chat.completions.create(
         model=os.getenv("JUDGE_MODEL_NAME"),
         messages=messages,
         response_format=PolicyJudgeResponse,
     )
     
-    first_choice = response.choices[0]
-    raw_content = (first_choice.message.content or "").strip()
+    content = response.choices[0].message.parsed
 
     try:
-        return PolicyJudgeResponse.model_validate_json(raw_content)
+        return content
     except Exception as e:
         return PolicyJudgeResponse(
             steps=[],
-            final_answer=FinalAnswer(reasoning=f"Parse error: {e}\nRaw: {raw_content}", accepted=False),
+            final_answer=FinalAnswer(reasoning=f"Parse error: {e}\nRaw: {response}", accepted=False),
         )
 
 def harmonic(n: int) -> float:
