@@ -113,7 +113,7 @@ def search_engine_query(keyword: str) -> list[SearchResult]:
     return [asdict(result) for result in results]
 
 tools_cfg = [
-    ToolConfig(name="search_engine_query", args={"keywords": "string"}),
+    ToolConfig(name="search_engine_query", args={"keyword": "string"}),
 ]
 
 # -----------------------------
