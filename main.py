@@ -4,11 +4,10 @@ from art.utils import iterate_dataset
 from datasets import load_dataset
 from pydantic import BaseModel
 from dataclasses import asdict, dataclass
-from openai import AsyncOpenAI, OpenAI
+from openai import AsyncOpenAI
 from dotenv import load_dotenv
 from typing import Any, Dict, List, Optional, Callable, Literal
 from tenacity import retry, stop_after_attempt
-from datasets import load_dataset
 from prompt import policy_judge_base_prompt
 import os
 import weave
@@ -223,7 +222,7 @@ class FinalAnswer(BaseModel):
     accepted: bool
 
 class PolicyJudgeResponse(BaseModel):
-    steps: List[StepEvaluation]
+    step_evaluations: List[StepEvaluation]
     final_answer: FinalAnswer
     
 
@@ -238,7 +237,7 @@ async def judge_policy_generation(gold: Scenario, traj: Trajectory) -> PolicyJud
     judge_input["policy_answer"] = traj.final_answer
     
     messages = [
-        { "role": "user", "content": (policy_judge_base_prompt, json.dumps(judge_input, indent=2)) }
+        { "role": "user", "content": policy_judge_base_prompt + json.dumps(judge_input, indent=2) },
     ]
     
     client = AsyncOpenAI(
@@ -258,7 +257,7 @@ async def judge_policy_generation(gold: Scenario, traj: Trajectory) -> PolicyJud
         return PolicyJudgeResponse.model_validate_json(raw_content)
     except Exception as e:
         return PolicyJudgeResponse(
-            steps=[],
+            step_evaluations=[],
             final_answer=FinalAnswer(reasoning=f"Parse error: {e}\nRaw: {response}", accepted=False),
         )
 
@@ -334,11 +333,11 @@ async def compute_reward(
     
     judge_report = await judge_policy_generation(item, traj)
     
-    print(f"For scenario {item.id}:\nJudge report: {json.dumps(judge_report, indent=2)}")
+    print(f"For scenario {item.id}:\nJudge report: {judge_report.model_dump_json(indent=2)}")
 
     # (2) Tool-call reward
     required_calls = item.required_tool_calls
-    valid_calls = sum(1 for step in judge_report.steps if step.verdict == "achieved")
+    valid_calls = sum(1 for step in judge_report.step_evaluations if step.verdict == "achieved")
     
     breakdown["tool_calls_required"] = float(required_calls)
     breakdown["tool_calls_actual"] = float(valid_calls)
@@ -349,7 +348,7 @@ async def compute_reward(
         complexity_penality = cfg.tool_base / required_calls
         
         harmonic_sum = 0
-        for step in judge_report.steps:
+        for step in judge_report.step_evaluations:
             if step.verdict == "achieved":
                 harmonic_sum += 1.0 / (step.idx + 1)
                 
