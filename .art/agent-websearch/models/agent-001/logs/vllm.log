@@ -1,0 +1,177 @@
+INFO 12-26 15:20:32 [api_server.py:1755] vLLM API server version 0.10.0
+INFO 12-26 15:20:32 [cli_args.py:261] non-default args: {'api_key': 'default', 'lora_modules': [LoRAModulePath(name='agent-001', path='/home/ubuntu/web-research-grpo/.art/agent-websearch/models/agent-001/checkpoints/0000', base_model_name=None)], 'return_tokens_as_token_ids': True, 'enable_auto_tool_choice': True, 'tool_call_parser': 'hermes', 'model': 'Qwen/Qwen3-4B-Instruct-2507', 'served_model_name': ['Qwen/Qwen3-4B-Instruct-2507'], 'generation_config': 'vllm', 'num_scheduler_steps': 16, 'disable_log_requests': True}
+INFO 12-26 15:20:32 [serving_models.py:162] Loaded new LoRA adapter: name 'agent-001', path '/home/ubuntu/web-research-grpo/.art/agent-websearch/models/agent-001/checkpoints/0000'
+INFO 12-26 15:20:32 [serving_chat.py:84] "auto" tool choice has been enabled please note that while the parallel_tool_calls client option is preset for compatibility reasons, it will be ignored.
+INFO 12-26 15:20:32 [api_server.py:1818] Starting vLLM API server 0 on http://0.0.0.0:8000
+INFO 12-26 15:20:32 [launcher.py:29] Available routes are:
+INFO 12-26 15:20:32 [launcher.py:37] Route: /openapi.json, Methods: HEAD, GET
+INFO 12-26 15:20:32 [launcher.py:37] Route: /docs, Methods: HEAD, GET
+INFO 12-26 15:20:32 [launcher.py:37] Route: /docs/oauth2-redirect, Methods: HEAD, GET
+INFO 12-26 15:20:32 [launcher.py:37] Route: /redoc, Methods: HEAD, GET
+INFO 12-26 15:20:32 [launcher.py:37] Route: /health, Methods: GET
+INFO 12-26 15:20:32 [launcher.py:37] Route: /load, Methods: GET
+INFO 12-26 15:20:32 [launcher.py:37] Route: /ping, Methods: POST
+INFO 12-26 15:20:32 [launcher.py:37] Route: /ping, Methods: GET
+INFO 12-26 15:20:32 [launcher.py:37] Route: /tokenize, Methods: POST
+INFO 12-26 15:20:32 [launcher.py:37] Route: /detokenize, Methods: POST
+INFO 12-26 15:20:32 [launcher.py:37] Route: /v1/models, Methods: GET
+INFO 12-26 15:20:32 [launcher.py:37] Route: /version, Methods: GET
+INFO 12-26 15:20:32 [launcher.py:37] Route: /v1/responses, Methods: POST
+INFO 12-26 15:20:32 [launcher.py:37] Route: /v1/responses/{response_id}, Methods: GET
+INFO 12-26 15:20:32 [launcher.py:37] Route: /v1/responses/{response_id}/cancel, Methods: POST
+INFO 12-26 15:20:32 [launcher.py:37] Route: /v1/chat/completions, Methods: POST
+INFO 12-26 15:20:32 [launcher.py:37] Route: /v1/completions, Methods: POST
+INFO 12-26 15:20:32 [launcher.py:37] Route: /v1/embeddings, Methods: POST
+INFO 12-26 15:20:32 [launcher.py:37] Route: /pooling, Methods: POST
+INFO 12-26 15:20:32 [launcher.py:37] Route: /classify, Methods: POST
+INFO 12-26 15:20:32 [launcher.py:37] Route: /score, Methods: POST
+INFO 12-26 15:20:32 [launcher.py:37] Route: /v1/score, Methods: POST
+INFO 12-26 15:20:32 [launcher.py:37] Route: /v1/audio/transcriptions, Methods: POST
+INFO 12-26 15:20:32 [launcher.py:37] Route: /v1/audio/translations, Methods: POST
+INFO 12-26 15:20:32 [launcher.py:37] Route: /rerank, Methods: POST
+INFO 12-26 15:20:32 [launcher.py:37] Route: /v1/rerank, Methods: POST
+INFO 12-26 15:20:32 [launcher.py:37] Route: /v2/rerank, Methods: POST
+INFO 12-26 15:20:32 [launcher.py:37] Route: /scale_elastic_ep, Methods: POST
+INFO 12-26 15:20:32 [launcher.py:37] Route: /is_scaling_elastic_ep, Methods: POST
+INFO 12-26 15:20:32 [launcher.py:37] Route: /invocations, Methods: POST
+INFO 12-26 15:20:32 [launcher.py:37] Route: /metrics, Methods: GET
+[32mINFO[0m:     Started server process [[36m22161[0m]
+[32mINFO[0m:     Waiting for application startup.
+[32mINFO[0m:     Application startup complete.
+[32mINFO[0m:     127.0.0.1:51614 - "GET /v1/models HTTP/1.1" 200
+INFO 12-26 15:21:07 [launcher.py:80] Shutting down FastAPI HTTP server.
+[32mINFO[0m:     Shutting down
+[32mINFO[0m:     Waiting for application shutdown.
+[32mINFO[0m:     Application shutdown complete.
+INFO 12-26 15:23:04 [api_server.py:1755] vLLM API server version 0.10.0
+INFO 12-26 15:23:04 [cli_args.py:261] non-default args: {'api_key': 'default', 'lora_modules': [LoRAModulePath(name='agent-001', path='/home/ubuntu/web-research-grpo/.art/agent-websearch/models/agent-001/checkpoints/0000', base_model_name=None)], 'return_tokens_as_token_ids': True, 'enable_auto_tool_choice': True, 'tool_call_parser': 'hermes', 'model': 'Qwen/Qwen3-4B-Instruct-2507', 'served_model_name': ['Qwen/Qwen3-4B-Instruct-2507'], 'generation_config': 'vllm', 'num_scheduler_steps': 16, 'disable_log_requests': True}
+INFO 12-26 15:23:04 [serving_models.py:162] Loaded new LoRA adapter: name 'agent-001', path '/home/ubuntu/web-research-grpo/.art/agent-websearch/models/agent-001/checkpoints/0000'
+INFO 12-26 15:23:04 [serving_chat.py:84] "auto" tool choice has been enabled please note that while the parallel_tool_calls client option is preset for compatibility reasons, it will be ignored.
+INFO 12-26 15:23:04 [api_server.py:1818] Starting vLLM API server 0 on http://0.0.0.0:8000
+INFO 12-26 15:23:04 [launcher.py:29] Available routes are:
+INFO 12-26 15:23:04 [launcher.py:37] Route: /openapi.json, Methods: GET, HEAD
+INFO 12-26 15:23:04 [launcher.py:37] Route: /docs, Methods: GET, HEAD
+INFO 12-26 15:23:04 [launcher.py:37] Route: /docs/oauth2-redirect, Methods: GET, HEAD
+INFO 12-26 15:23:04 [launcher.py:37] Route: /redoc, Methods: GET, HEAD
+INFO 12-26 15:23:04 [launcher.py:37] Route: /health, Methods: GET
+INFO 12-26 15:23:04 [launcher.py:37] Route: /load, Methods: GET
+INFO 12-26 15:23:04 [launcher.py:37] Route: /ping, Methods: POST
+INFO 12-26 15:23:04 [launcher.py:37] Route: /ping, Methods: GET
+INFO 12-26 15:23:04 [launcher.py:37] Route: /tokenize, Methods: POST
+INFO 12-26 15:23:04 [launcher.py:37] Route: /detokenize, Methods: POST
+INFO 12-26 15:23:04 [launcher.py:37] Route: /v1/models, Methods: GET
+INFO 12-26 15:23:04 [launcher.py:37] Route: /version, Methods: GET
+INFO 12-26 15:23:04 [launcher.py:37] Route: /v1/responses, Methods: POST
+INFO 12-26 15:23:04 [launcher.py:37] Route: /v1/responses/{response_id}, Methods: GET
+INFO 12-26 15:23:04 [launcher.py:37] Route: /v1/responses/{response_id}/cancel, Methods: POST
+INFO 12-26 15:23:04 [launcher.py:37] Route: /v1/chat/completions, Methods: POST
+INFO 12-26 15:23:04 [launcher.py:37] Route: /v1/completions, Methods: POST
+INFO 12-26 15:23:04 [launcher.py:37] Route: /v1/embeddings, Methods: POST
+INFO 12-26 15:23:04 [launcher.py:37] Route: /pooling, Methods: POST
+INFO 12-26 15:23:04 [launcher.py:37] Route: /classify, Methods: POST
+INFO 12-26 15:23:04 [launcher.py:37] Route: /score, Methods: POST
+INFO 12-26 15:23:04 [launcher.py:37] Route: /v1/score, Methods: POST
+INFO 12-26 15:23:04 [launcher.py:37] Route: /v1/audio/transcriptions, Methods: POST
+INFO 12-26 15:23:04 [launcher.py:37] Route: /v1/audio/translations, Methods: POST
+INFO 12-26 15:23:04 [launcher.py:37] Route: /rerank, Methods: POST
+INFO 12-26 15:23:04 [launcher.py:37] Route: /v1/rerank, Methods: POST
+INFO 12-26 15:23:04 [launcher.py:37] Route: /v2/rerank, Methods: POST
+INFO 12-26 15:23:04 [launcher.py:37] Route: /scale_elastic_ep, Methods: POST
+INFO 12-26 15:23:04 [launcher.py:37] Route: /is_scaling_elastic_ep, Methods: POST
+INFO 12-26 15:23:04 [launcher.py:37] Route: /invocations, Methods: POST
+INFO 12-26 15:23:04 [launcher.py:37] Route: /metrics, Methods: GET
+[32mINFO[0m:     Started server process [[36m23647[0m]
+[32mINFO[0m:     Waiting for application startup.
+[32mINFO[0m:     Application startup complete.
+[32mINFO[0m:     127.0.0.1:39908 - "GET /v1/models HTTP/1.1" 200
+[32mINFO[0m:     Shutting down
+INFO 12-26 15:23:38 [launcher.py:80] Shutting down FastAPI HTTP server.
+[32mINFO[0m:     Shutting down
+[32mINFO[0m:     Waiting for application shutdown.
+[32mINFO[0m:     Application shutdown complete.
+INFO 12-26 15:27:46 [api_server.py:1755] vLLM API server version 0.10.0
+INFO 12-26 15:27:46 [cli_args.py:261] non-default args: {'api_key': 'default', 'lora_modules': [LoRAModulePath(name='agent-001', path='/home/ubuntu/web-research-grpo/.art/agent-websearch/models/agent-001/checkpoints/0000', base_model_name=None)], 'return_tokens_as_token_ids': True, 'enable_auto_tool_choice': True, 'tool_call_parser': 'hermes', 'model': 'Qwen/Qwen3-4B-Instruct-2507', 'served_model_name': ['Qwen/Qwen3-4B-Instruct-2507'], 'generation_config': 'vllm', 'num_scheduler_steps': 16, 'disable_log_requests': True}
+INFO 12-26 15:27:46 [serving_models.py:162] Loaded new LoRA adapter: name 'agent-001', path '/home/ubuntu/web-research-grpo/.art/agent-websearch/models/agent-001/checkpoints/0000'
+INFO 12-26 15:27:46 [serving_chat.py:84] "auto" tool choice has been enabled please note that while the parallel_tool_calls client option is preset for compatibility reasons, it will be ignored.
+INFO 12-26 15:27:46 [api_server.py:1818] Starting vLLM API server 0 on http://0.0.0.0:8000
+INFO 12-26 15:27:46 [launcher.py:29] Available routes are:
+INFO 12-26 15:27:46 [launcher.py:37] Route: /openapi.json, Methods: GET, HEAD
+INFO 12-26 15:27:46 [launcher.py:37] Route: /docs, Methods: GET, HEAD
+INFO 12-26 15:27:46 [launcher.py:37] Route: /docs/oauth2-redirect, Methods: GET, HEAD
+INFO 12-26 15:27:46 [launcher.py:37] Route: /redoc, Methods: GET, HEAD
+INFO 12-26 15:27:46 [launcher.py:37] Route: /health, Methods: GET
+INFO 12-26 15:27:46 [launcher.py:37] Route: /load, Methods: GET
+INFO 12-26 15:27:46 [launcher.py:37] Route: /ping, Methods: POST
+INFO 12-26 15:27:46 [launcher.py:37] Route: /ping, Methods: GET
+INFO 12-26 15:27:46 [launcher.py:37] Route: /tokenize, Methods: POST
+INFO 12-26 15:27:46 [launcher.py:37] Route: /detokenize, Methods: POST
+INFO 12-26 15:27:46 [launcher.py:37] Route: /v1/models, Methods: GET
+INFO 12-26 15:27:46 [launcher.py:37] Route: /version, Methods: GET
+INFO 12-26 15:27:46 [launcher.py:37] Route: /v1/responses, Methods: POST
+INFO 12-26 15:27:46 [launcher.py:37] Route: /v1/responses/{response_id}, Methods: GET
+INFO 12-26 15:27:46 [launcher.py:37] Route: /v1/responses/{response_id}/cancel, Methods: POST
+INFO 12-26 15:27:46 [launcher.py:37] Route: /v1/chat/completions, Methods: POST
+INFO 12-26 15:27:46 [launcher.py:37] Route: /v1/completions, Methods: POST
+INFO 12-26 15:27:46 [launcher.py:37] Route: /v1/embeddings, Methods: POST
+INFO 12-26 15:27:46 [launcher.py:37] Route: /pooling, Methods: POST
+INFO 12-26 15:27:46 [launcher.py:37] Route: /classify, Methods: POST
+INFO 12-26 15:27:46 [launcher.py:37] Route: /score, Methods: POST
+INFO 12-26 15:27:46 [launcher.py:37] Route: /v1/score, Methods: POST
+INFO 12-26 15:27:46 [launcher.py:37] Route: /v1/audio/transcriptions, Methods: POST
+INFO 12-26 15:27:46 [launcher.py:37] Route: /v1/audio/translations, Methods: POST
+INFO 12-26 15:27:46 [launcher.py:37] Route: /rerank, Methods: POST
+INFO 12-26 15:27:46 [launcher.py:37] Route: /v1/rerank, Methods: POST
+INFO 12-26 15:27:46 [launcher.py:37] Route: /v2/rerank, Methods: POST
+INFO 12-26 15:27:46 [launcher.py:37] Route: /scale_elastic_ep, Methods: POST
+INFO 12-26 15:27:46 [launcher.py:37] Route: /is_scaling_elastic_ep, Methods: POST
+INFO 12-26 15:27:46 [launcher.py:37] Route: /invocations, Methods: POST
+INFO 12-26 15:27:46 [launcher.py:37] Route: /metrics, Methods: GET
+[32mINFO[0m:     Started server process [[36m25021[0m]
+[32mINFO[0m:     Waiting for application startup.
+[32mINFO[0m:     Application startup complete.
+[32mINFO[0m:     127.0.0.1:57304 - "GET /v1/models HTTP/1.1" 200
+INFO 12-26 15:34:11 [api_server.py:1755] vLLM API server version 0.10.0
+INFO 12-26 15:34:11 [cli_args.py:261] non-default args: {'api_key': 'default', 'lora_modules': [LoRAModulePath(name='agent-001', path='/home/ubuntu/web-research-grpo/.art/agent-websearch/models/agent-001/checkpoints/0000', base_model_name=None)], 'return_tokens_as_token_ids': True, 'enable_auto_tool_choice': True, 'tool_call_parser': 'hermes', 'model': 'Qwen/Qwen3-4B-Instruct-2507', 'served_model_name': ['Qwen/Qwen3-4B-Instruct-2507'], 'generation_config': 'vllm', 'num_scheduler_steps': 16, 'disable_log_requests': True}
+INFO 12-26 15:34:11 [serving_models.py:162] Loaded new LoRA adapter: name 'agent-001', path '/home/ubuntu/web-research-grpo/.art/agent-websearch/models/agent-001/checkpoints/0000'
+INFO 12-26 15:34:11 [serving_chat.py:84] "auto" tool choice has been enabled please note that while the parallel_tool_calls client option is preset for compatibility reasons, it will be ignored.
+INFO 12-26 15:34:11 [api_server.py:1818] Starting vLLM API server 0 on http://0.0.0.0:8000
+INFO 12-26 15:34:11 [launcher.py:29] Available routes are:
+INFO 12-26 15:34:11 [launcher.py:37] Route: /openapi.json, Methods: HEAD, GET
+INFO 12-26 15:34:11 [launcher.py:37] Route: /docs, Methods: HEAD, GET
+INFO 12-26 15:34:11 [launcher.py:37] Route: /docs/oauth2-redirect, Methods: HEAD, GET
+INFO 12-26 15:34:11 [launcher.py:37] Route: /redoc, Methods: HEAD, GET
+INFO 12-26 15:34:11 [launcher.py:37] Route: /health, Methods: GET
+INFO 12-26 15:34:11 [launcher.py:37] Route: /load, Methods: GET
+INFO 12-26 15:34:11 [launcher.py:37] Route: /ping, Methods: POST
+INFO 12-26 15:34:11 [launcher.py:37] Route: /ping, Methods: GET
+INFO 12-26 15:34:11 [launcher.py:37] Route: /tokenize, Methods: POST
+INFO 12-26 15:34:11 [launcher.py:37] Route: /detokenize, Methods: POST
+INFO 12-26 15:34:11 [launcher.py:37] Route: /v1/models, Methods: GET
+INFO 12-26 15:34:11 [launcher.py:37] Route: /version, Methods: GET
+INFO 12-26 15:34:11 [launcher.py:37] Route: /v1/responses, Methods: POST
+INFO 12-26 15:34:11 [launcher.py:37] Route: /v1/responses/{response_id}, Methods: GET
+INFO 12-26 15:34:11 [launcher.py:37] Route: /v1/responses/{response_id}/cancel, Methods: POST
+INFO 12-26 15:34:11 [launcher.py:37] Route: /v1/chat/completions, Methods: POST
+INFO 12-26 15:34:11 [launcher.py:37] Route: /v1/completions, Methods: POST
+INFO 12-26 15:34:11 [launcher.py:37] Route: /v1/embeddings, Methods: POST
+INFO 12-26 15:34:11 [launcher.py:37] Route: /pooling, Methods: POST
+INFO 12-26 15:34:11 [launcher.py:37] Route: /classify, Methods: POST
+INFO 12-26 15:34:11 [launcher.py:37] Route: /score, Methods: POST
+INFO 12-26 15:34:11 [launcher.py:37] Route: /v1/score, Methods: POST
+INFO 12-26 15:34:11 [launcher.py:37] Route: /v1/audio/transcriptions, Methods: POST
+INFO 12-26 15:34:11 [launcher.py:37] Route: /v1/audio/translations, Methods: POST
+INFO 12-26 15:34:11 [launcher.py:37] Route: /rerank, Methods: POST
+INFO 12-26 15:34:11 [launcher.py:37] Route: /v1/rerank, Methods: POST
+INFO 12-26 15:34:11 [launcher.py:37] Route: /v2/rerank, Methods: POST
+INFO 12-26 15:34:11 [launcher.py:37] Route: /scale_elastic_ep, Methods: POST
+INFO 12-26 15:34:11 [launcher.py:37] Route: /is_scaling_elastic_ep, Methods: POST
+INFO 12-26 15:34:11 [launcher.py:37] Route: /invocations, Methods: POST
+INFO 12-26 15:34:11 [launcher.py:37] Route: /metrics, Methods: GET
+[32mINFO[0m:     Started server process [[36m25841[0m]
+[32mINFO[0m:     Waiting for application startup.
+[32mINFO[0m:     Application startup complete.
+[32mINFO[0m:     127.0.0.1:36022 - "GET /v1/models HTTP/1.1" 200
+INFO 12-26 15:35:06 [launcher.py:80] Shutting down FastAPI HTTP server.
+[32mINFO[0m:     Shutting down
+[32mINFO[0m:     Waiting for application shutdown.
+[32mINFO[0m:     Application shutdown complete.

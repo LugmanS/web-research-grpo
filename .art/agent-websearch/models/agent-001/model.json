@@ -1,0 +1,1 @@
+{"name": "agent-001", "project": "agent-websearch", "entity": null, "id": null, "config": null, "trainable": true, "inference_api_key": null, "inference_base_url": null, "inference_model_name": null, "base_model": "Qwen/Qwen3-4B-Instruct-2507", "_internal_config": null}
