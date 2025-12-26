@@ -95,7 +95,7 @@ def search_engine_query(keyword: str) -> list[SearchResult]:
     
     results = [SearchResult(title=result.get("title"), snippet=result.get("content"), url=result.get("url")) for result in results]
     
-    return [asdict(result) for result in results]
+    return [asdict(result) for result in results[:10]]
 
 tools_cfg = [
     ToolConfig(name="search_engine_query", args={"keyword": "string"}),
