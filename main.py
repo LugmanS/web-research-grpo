@@ -16,6 +16,7 @@ import json
 import re
 import itertools
 import threading
+import asyncio
 
 load_dotenv()
 
@@ -541,3 +542,5 @@ async def main():
     
     # await train(model, train_scenarios, validation_scenarios)
     
+if __name__ == "__main__":
+    asyncio.run(main())
