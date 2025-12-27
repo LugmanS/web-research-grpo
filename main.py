@@ -9,8 +9,7 @@ from dotenv import load_dotenv
 from typing import Any, Dict, List, Optional, Literal
 from tenacity import retry, stop_after_attempt
 from prompt import policy_judge_base_prompt
-import psycopg
-from psycopg.rows import dict_row
+from qdrant_client import QdrantClient
 import os
 import weave
 import json
@@ -19,12 +18,10 @@ import asyncio
 
 load_dotenv()
 
-conn = psycopg.connect(
-    host="13.202.113.197",
-    port=5432,
-    user="admin",
-    password="password",
-    dbname="agent"
+qdrant = QdrantClient(host="13.202.113.197", port=6333)
+
+openai_client = AsyncOpenAI(
+    api_key=os.getenv("OPENAI_API_KEY"),
 )
 
 # -----------------------------
@@ -78,46 +75,39 @@ tool_definitions = [
         "type": "function",
         "function": {
         "name": "search_documents",
-        "description": "Retrieve relevant documents using keyword-based full-text search.",
+        "description": "Retrieve relevant documents using a search query.",
         "parameters": {
             "type": "object",
             "properties": {
-                "keyword": {"type": "string", "description": "A keyword or natural-language search query."}
+                "query": {"type": "string", "description": "A natural-language search query."}
             },
-            "required": ["keyword"]
+            "required": ["query"]
         }
         }
     }
 ]
 
-def search_documents(keyword: str) -> list[SearchResult]:
-    if not keyword:
-        raise ValueError("No keyword provided to perform web search.")
+async def search_documents(query: str) -> list[SearchResult]:
+    if not query:
+        raise ValueError("No query provided to perform search.")
     
-    limit = 8
+    embedding_res = await openai_client.embeddings.create(
+        input=query,
+        model="text-embedding-3-small"
+    )
+    query_embedding = embedding_res.data[0].embedding
     
-    sql = """
-        SELECT
-            id,
-            title,
-            content,
-            questions_supporting,
-            ts_rank_cd(tsv, websearch_to_tsquery('english', %s)) AS score
-        FROM docs
-        WHERE tsv @@ websearch_to_tsquery('english', %s)
-        ORDER BY score DESC
-        LIMIT %s;
-    """
+    if not query_embedding:
+        raise ValueError("No query embedding generated.")
     
-    with conn.cursor(row_factory=dict_row) as cur:
-        cur.execute(sql, (keyword, keyword, limit))
-        results = cur.fetchall()
+    hits = qdrant.query_points(collection_name="documents", query=query_embedding, limit=8, with_payload=True)
     
-    results = [SearchResult(title=result.get("title"), content=result.get("content")) for result in results]
+    results = [SearchResult(title=point.payload.get("title"), content=point.payload.get("content")) for point in hits.points]
     return [asdict(result) for result in results]
+    
 
 tools_cfg = [
-    ToolConfig(name="search_documents", args={"keyword": "string"}),
+    ToolConfig(name="search_documents", args={"query": "string"}),
 ]
 
 # -----------------------------
