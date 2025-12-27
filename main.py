@@ -33,15 +33,17 @@ genai_client = genai.Client(vertexai=True, project=os.getenv("GENAI_PROJECT_ID")
 
 @dataclass
 class Hop:
+    id: str
     question: str
     answer: str
+    support_content: str
 
 @dataclass
 class Scenario:
     id: str
     full_question: str
-    steps: List[Hop]
     final_answer: str
+    steps: List[Hop]
 
     @property
     def required_tool_calls(self) -> int:
