@@ -240,6 +240,7 @@ async def judge_policy_generation(gold: Scenario, traj: Trajectory) -> PolicyJud
     try:
         return PolicyJudgeResponse.model_validate_json(raw_content)
     except Exception as e:
+        print(f"Judge parse error: {e}\nRaw: {response}")
         return PolicyJudgeResponse(
             step_evaluations=[],
             final_answer=FinalAnswer(reasoning=f"Parse error: {e}\nRaw: {response}", accepted=False),
@@ -318,8 +319,6 @@ async def compute_reward(
     
     judge_report = await judge_policy_generation(item, traj)
     
-    print(f"For scenario {item.id}:\nJudge report: {judge_report.model_dump_json(indent=2)}")
-
     # (2) Tool-call reward
     required_calls = item.required_tool_calls
     valid_calls = sum(1 for step in judge_report.step_evaluations if step.verdict == "achieved")
@@ -416,7 +415,6 @@ async def rollout(model: art.Model, step_scenario: StepScenario) -> ProjectTraje
                 if tool_name == "search_documents":
                     tool_args = json.loads(tool_call.function.arguments)
                     result = await search_documents(**tool_args)
-                    print(f"Retrieved results from search_documents for query: {tool_args['query']}")
                     traj.messages_and_choices.append(
                         {
                             "role": "tool",
@@ -438,7 +436,7 @@ async def rollout(model: art.Model, step_scenario: StepScenario) -> ProjectTraje
 
 training_config = {
     "groups_per_step": 8,
-    "num_epochs": 1,
+    "num_epochs": 20,
     "rollouts_per_group": 4,
     "learning_rate": 1e-5,
     "max_steps": 2000,
@@ -526,8 +524,8 @@ async def main():
     DATASET_ID = "lugman-madhiai/sampled-misique"
 
     model = art.TrainableModel(
-        name="fts-agent-grpo-v1",
-        project="agent-websearch",
+        name="semantic-search-agent-v1",
+        project="art-grpo",
         base_model=BASE_MODEL_ID,
     )
 
