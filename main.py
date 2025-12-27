@@ -402,7 +402,6 @@ async def rollout(model: art.Model, step_scenario: StepScenario) -> ProjectTraje
          
         if not response_message.tool_calls:
             traj.final_answer = response_message.content
-            print(traj.messages_and_choices)
             messages_dict = [
                 to_message_dict(c)
                 for c in traj.messages_and_choices
@@ -430,7 +429,7 @@ async def rollout(model: art.Model, step_scenario: StepScenario) -> ProjectTraje
         except Exception as e:
             print(f"Error executing tool call: {e}")
             return traj
-    print(traj)
+        
     return traj
 
 # -----------------------------
@@ -438,12 +437,12 @@ async def rollout(model: art.Model, step_scenario: StepScenario) -> ProjectTraje
 # -----------------------------
 
 training_config = {
-    "groups_per_step": 2,
-    "num_epochs": 20,
+    "groups_per_step": 8,
+    "num_epochs": 1,
     "rollouts_per_group": 4,
     "learning_rate": 1e-5,
-    "max_steps": 50,
-    "validation_step_interval": 5,
+    "max_steps": 2000,
+    "validation_step_interval": 30,
 }
 
 async def train(model: art.Model, scenarios: List[Scenario], validation_scenarios: List[Scenario]):
@@ -524,7 +523,7 @@ async def main():
     DATASET_ID = "lugman-madhiai/sampled-misique"
 
     model = art.TrainableModel(
-        name="agent-001",
+        name="websearch-agent-grpo-v1",
         project="agent-websearch",
         base_model=BASE_MODEL_ID,
     )
