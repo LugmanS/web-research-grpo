@@ -6,19 +6,26 @@ from pydantic import BaseModel
 from dataclasses import asdict, dataclass
 from openai import AsyncOpenAI
 from dotenv import load_dotenv
-from typing import Any, Dict, List, Optional, Callable, Literal
+from typing import Any, Dict, List, Optional, Literal
 from tenacity import retry, stop_after_attempt
 from prompt import policy_judge_base_prompt
+import psycopg
+from psycopg.rows import dict_row
 import os
 import weave
-import requests
 import json
 import re
-import itertools
-import threading
 import asyncio
 
 load_dotenv()
+
+conn = psycopg.connect(
+    host="13.202.113.197",
+    port=5432,
+    user="admin",
+    password="password",
+    dbname="agent"
+)
 
 # -----------------------------
 # Data models
@@ -64,19 +71,18 @@ class ToolConfig:
 @dataclass
 class SearchResult:
     title: str
-    snippet: str
-    url: str
+    content: str
 
 tool_definitions = [
     {
         "type": "function",
         "function": {
-        "name": "search_engine_query",
-        "description": "This tool queries the search engine for the provided keywords.",
+        "name": "search_documents",
+        "description": "Retrieve relevant documents using keyword-based full-text search.",
         "parameters": {
             "type": "object",
             "properties": {
-                "keyword": {"type": "string", "description": "The keywords to search for."}
+                "keyword": {"type": "string", "description": "A keyword or natural-language search query."}
             },
             "required": ["keyword"]
         }
@@ -84,21 +90,34 @@ tool_definitions = [
     }
 ]
 
-def search_engine_query(keyword: str) -> list[SearchResult]:
+def search_documents(keyword: str) -> list[SearchResult]:
     if not keyword:
         raise ValueError("No keyword provided to perform web search.")
     
-    response = requests.request("GET", f"{os.getenv("SEARCH_ENGINE_URL")}?q={keyword}&format=json")
+    limit = 8
     
-    data = response.json()
-    results = data.get("results", [])
+    sql = """
+        SELECT
+            id,
+            title,
+            content,
+            questions_supporting,
+            ts_rank_cd(tsv, websearch_to_tsquery('english', %s)) AS score
+        FROM docs
+        WHERE tsv @@ websearch_to_tsquery('english', %s)
+        ORDER BY score DESC
+        LIMIT %s;
+    """
     
-    results = [SearchResult(title=result.get("title"), snippet=result.get("content"), url=result.get("url")) for result in results]
+    with conn.cursor(row_factory=dict_row) as cur:
+        cur.execute(sql, (keyword, keyword, limit))
+        results = cur.fetchall()
     
-    return [asdict(result) for result in results[:10]]
+    results = [SearchResult(title=result.get("title"), content=result.get("content")) for result in results]
+    return [asdict(result) for result in results]
 
 tools_cfg = [
-    ToolConfig(name="search_engine_query", args={"keyword": "string"}),
+    ToolConfig(name="search_documents", args={"keyword": "string"}),
 ]
 
 # -----------------------------
@@ -417,9 +436,9 @@ async def rollout(model: art.Model, step_scenario: StepScenario) -> ProjectTraje
         try:
             for tool_call in response_message.tool_calls:
                 tool_name: str = tool_call.function.name
-                if tool_name == "search_engine_query":
+                if tool_name == "search_documents":
                     tool_args = json.loads(tool_call.function.arguments)
-                    result = search_engine_query(**tool_args)
+                    result = search_documents(**tool_args)
                     traj.messages_and_choices.append(
                         {
                             "role": "tool",
@@ -445,7 +464,8 @@ training_config = {
     "rollouts_per_group": 4,
     "learning_rate": 1e-5,
     "max_steps": 2000,
-    "validation_step_interval": 30,
+    "validation_step_interval": 100,
+    "persist_checkpoint_interval": 100,
 }
 
 async def train(model: art.Model, scenarios: List[Scenario], validation_scenarios: List[Scenario]):
@@ -504,7 +524,9 @@ async def train(model: art.Model, scenarios: List[Scenario], validation_scenario
                 split="val"
             )
 
-        await model.delete_checkpoints()
+        if batch.step % training_config["persist_checkpoint_interval"] != 0:
+            await model.delete_checkpoints()
+            
         await model.train(
             judged_groups,
             config=art.TrainConfig(learning_rate=training_config["learning_rate"]),
@@ -526,7 +548,7 @@ async def main():
     DATASET_ID = "lugman-madhiai/sampled-misique"
 
     model = art.TrainableModel(
-        name="websearch-agent-grpo-v1",
+        name="fts-agent-grpo-v1",
         project="agent-websearch",
         base_model=BASE_MODEL_ID,
     )
