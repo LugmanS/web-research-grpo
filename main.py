@@ -397,14 +397,36 @@ async def rollout(model: art.Model, step_scenario: StepScenario) -> ProjectTraje
         api_key=model.inference_api_key,
     )
     
+    TIMEOUT_SECONDS = 60.0
+    MAX_RETRIES = 3
+
     for _ in range(7):
-        response = await client.chat.completions.create(
-            model=model.get_inference_name(),
-            temperature=1,
-            messages=traj.messages(),
-            tools=traj.tools,
-        )
-        
+        response = None
+
+        for attempt in range(MAX_RETRIES):
+            try:
+                response = await asyncio.wait_for(
+                    client.chat.completions.create(
+                        model=model.get_inference_name(),
+                        temperature=1,
+                        messages=traj.messages(),
+                        tools=traj.tools,
+                    ),
+                    timeout=TIMEOUT_SECONDS
+                )
+                break
+            except asyncio.TimeoutError:
+                print(f"Request timed out (Attempt {attempt + 1}/{MAX_RETRIES}). Retrying...")
+                if attempt == MAX_RETRIES - 1:
+                    print("Max retries reached. Exiting rollout.")
+                    return traj
+            except Exception as e:
+                print(f"API Error: {e}")
+                return traj
+
+        if not response:
+            return traj
+
         response_message = response.choices[0].message
         traj.messages_and_choices.append(response.choices[0])
          
