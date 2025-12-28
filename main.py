@@ -7,7 +7,7 @@ from dataclasses import asdict, dataclass
 from openai import AsyncOpenAI
 from dotenv import load_dotenv
 from typing import Any, Dict, List, Optional, Literal
-from tenacity import retry, stop_after_attempt
+from tenacity import retry, stop_after_attempt, wait_exponential, before_sleep_log
 from prompt import policy_judge_base_prompt
 from qdrant_client import QdrantClient
 from google import genai
@@ -16,6 +16,7 @@ import weave
 import json
 import re
 import asyncio
+import logging
 
 load_dotenv()
 
@@ -225,7 +226,15 @@ class PolicyJudgeResponse(BaseModel):
     final_answer: FinalAnswer
     
 
-@retry(stop=stop_after_attempt(3))
+logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO)
+
+@retry(
+    stop=stop_after_attempt(3),
+    wait=wait_exponential(min=1, max=10),
+    before_sleep=before_sleep_log(logger, logging.WARNING),
+    reraise=True,  # IMPORTANT: raise the original exception instead of RetryError
+)
 async def judge_policy_generation(gold: Scenario, traj: Trajectory) -> PolicyJudgeResponse:
     
     judge_input = {}
