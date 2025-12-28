@@ -17,6 +17,8 @@ import json
 import re
 import asyncio
 import logging
+import sys
+import traceback
 
 load_dotenv()
 
@@ -577,4 +579,10 @@ async def main():
     await train(model, train_scenarios, validation_scenarios)
     
 if __name__ == "__main__":
-    asyncio.run(main())
+    try:
+        asyncio.run(main())
+    except Exception as e:
+        sys.stderr.write(f"\nCRITICAL PROCESS FAILURE: {str(e)}\n")
+        traceback.print_exc()
+        
+        sys.exit(1)
