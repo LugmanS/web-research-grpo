@@ -114,7 +114,7 @@ async def search_documents(query: str, scenario_id: str) -> list[dict]:
         raise ValueError("No query embedding generated.")
 
     hits = qdrant.query_points(
-        collection_name="documents",
+        collection_name="documents_voyage",
         query=query_embedding,
         limit=10,
         with_payload=True,
